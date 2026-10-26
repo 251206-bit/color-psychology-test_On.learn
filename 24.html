@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24가지 심층 색채 심리 진단 & 컬러 테라피</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter & Noto Sans KR Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=ㅁswap">
+
+    <style>
+        * {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 50%, #dbeaff 100%);
+            min-height: 100vh;
+        }
+
+        /* Smooth Screen Transitions */
+        .screen {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .screen.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Color Button Hover Effects */
+        .color-card-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .color-card-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Custom Toast Animation */
+        #toast {
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        #toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        #toast.hide {
+            opacity: 0;
+            transform: translate(-50%, 20px);
+        }
+    </style>
+</head>
+<body class="p-3 sm:p-6 md:p-10 flex justify-center items-center">
+
+<div class="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl border border-white/50 p-6 sm:p-10 relative overflow-hidden">
+    
+    <!-- Toast Notification Banner -->
+    <div id="toast" class="hide fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 text-sm font-medium border border-slate-700 pointer-events-none">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toast-message">메시지 내용</span>
+    </div>
+
+    <!-- 1. 시작 화면 (Intro Screen) -->
+    <div id="intro-screen" class="screen active text-center py-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs sm:text-sm font-semibold mb-6">
+            <i class="fa-solid fa-palette"></i> 무의식 심층 라포 탐색
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-4 tracking-tight leading-tight">
+            🎨 확장형 24색 심층 색채 심리 진단
+        </h1>
+        <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-8">
+            24가지의 다채로운 스펙트럼 속에서 현재 당신의 마음을 주도하고 있는 무의식적 에너지와 감정 상태를 정밀하게 진단합니다.<br class="hidden sm:inline">
+            상세한 내면 리포트, 그림자 감정, 그리고 맞춤형 컬러 테라피 솔루션을 만나보세요.
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-md mx-auto mb-10">
+            <button onclick="startQuiz()" class="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2 text-base">
+                <i class="fa-solid fa-play"></i> 진단 시작하기
+            </button>
+            <button onclick="toggleEncyclopediaModal(true)" class="w-full sm:w-auto px-6 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-2xl transition-all flex items-center justify-center gap-2 text-base">
+                <i class="fa-solid fa-book-open"></i> 24색 백과사전 탐색
+            </button>
+        </div>
+
+        <!-- Summary Features -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-100 text-left">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mb-2">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h4 class="font-bold text-slate-800 text-sm mb-1">무의식 리포트</h4>
+                <p class="text-xs text-slate-500">현재 심리 상태와 감추어진 무의식적 욕구를 정밀 분석합니다.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2">
+                    <i class="fa-solid fa-spa"></i>
+                </div>
+                <h4 class="font-bold text-slate-800 text-sm mb-1">컬러 테라피</h4>
+                <p class="text-xs text-slate-500">일상에서 즉시 적용 가능한 가슴 깊은 처방전과 루틴 제공.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center mb-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <h4 class="font-bold text-slate-800 text-sm mb-1">변화 기록 저장</h4>
+                <p class="text-xs text-slate-500">검사 결과를 저장하고 시간에 따른 심리 변화 흐름을 확인하세요.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 질문 화면 (Quiz Screen) -->
+    <div id="quiz-screen" class="screen">
+        <!-- Progress Bar -->
+        <div class="mb-6">
+            <div class="flex justify-between items-center mb-2 text-xs font-semibold text-slate-500">
+                <span id="question-indicator" class="text-indigo-600 font-bold">질문 1 / 8</span>
+                <span id="progress-text" class="text-slate-400">12% 진행됨</span>
+            </div>
+            <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-300 w-0"></div>
+            </div>
+        </div>
+
+        <div class="mb-8 text-center sm:text-left">
+            <h2 id="question-title" class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug break-keep">
+                질문 내용이 이곳에 표시됩니다.
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-2">
+                너무 깊이 생각하지 말고, 직관적으로 가장 끌리는 색상을 선택해 주세요.
+            </p>
+        </div>
+
+        <!-- Color Options Grid -->
+        <div id="color-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
+            <!-- Dynamically populated color buttons -->
+        </div>
+    </div>
+
+    <!-- 3. 결과 화면 (Result Screen) -->
+    <div id="result-screen" class="screen">
+        <!-- Result Header Banner -->
+        <div id="result-header" class="rounded-3xl p-6 sm:p-8 text-white mb-8 shadow-xl relative overflow-hidden transition-all duration-500">
+            <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <span id="result-badge" class="inline-block px-3 py-1 rounded-full text-xs font-extrabold tracking-wider bg-white/20 backdrop-blur-md mb-2 border border-white/30">
+                        색상명
+                    </span>
+                    <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold leading-tight">
+                        당신의 현재 상태 분석 결과
+                    </h2>
+                    <p id="result-subtitle" class="text-white/90 text-sm mt-1 font-medium">
+                        핵심 심리 에너지 한 줄 요약
+                    </p>
+                </div>
+                <div id="result-color-swatch" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shadow-inner border-4 border-white/40 flex-shrink-0 self-end sm:self-center"></div>
+            </div>
+        </div>
+
+        <!-- Comprehensive Diagnostic Details Grid -->
+        <div class="space-y-6 mb-8">
+            <!-- 1. Deep Mind Analysis -->
+            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center gap-3 mb-3 text-indigo-600 font-bold text-lg">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                    </div>
+                    <h3>현재 심리 & 에너지 분석</h3>
+                </div>
+                <p id="result-positive" class="text-slate-700 text-sm sm:text-base leading-relaxed break-keep">
+                    분석 내용이 로드됩니다.
+                </p>
+            </div>
+
+            <!-- 2. Shadow & Inner Need -->
+            <div class="p-6 bg-amber-50/60 rounded-2xl border border-amber-200/70 shadow-sm">
+                <div class="flex items-center gap-3 mb-3 text-amber-700 font-bold text-lg">
+                    <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+                        <i class="fa-solid fa-masks-theater"></i>
+                    </div>
+                    <h3>내면의 그림자 & 무의식적 욕구</h3>
+                </div>
+                <p id="result-negative" class="text-slate-700 text-sm sm:text-base leading-relaxed break-keep">
+                    주의할 점 및 무의식 욕구 내용이 로드됩니다.
+                </p>
+            </div>
+
+            <!-- 3. Color Therapy & Action Plan -->
+            <div class="p-6 bg-emerald-50/60 rounded-2xl border border-emerald-200/70 shadow-sm">
+                <div class="flex items-center gap-3 mb-3 text-emerald-700 font-bold text-lg">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3>맞춤형 컬러 테라피 & 실천 가이드</h3>
+                </div>
+                <p id="result-solution" class="text-slate-700 text-sm sm:text-base leading-relaxed break-keep">
+                    솔루션 내용이 로드됩니다.
+                </p>
+            </div>
+
+            <!-- 4. Color Chemistry & Combos -->
+            <div class="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-3 mb-4 text-slate-800 font-bold text-lg">
+                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+                        <i class="fa-solid fa-arrows-split-up-and-left"></i>
+                    </div>
+                    <h3>컬러 조합 분석 (시너지 & 주의)</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div id="good-combo-box" class="p-4 rounded-xl bg-emerald-50/50 border border-emerald-200/60">
+                        <div class="flex items-center gap-2 font-bold text-emerald-800 text-sm mb-2">
+                            <i class="fa-solid fa-circle-check text-emerald-500"></i> 시너지 보완 색상
+                        </div>
+                        <p id="good-combo-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed break-keep"></p>
+                    </div>
+                    <div id="bad-combo-box" class="p-4 rounded-xl bg-rose-50/50 border border-rose-200/60">
+                        <div class="flex items-center gap-2 font-bold text-rose-800 text-sm mb-2">
+                            <i class="fa-solid fa-triangle-exclamation text-rose-500"></i> 마찰 주의 색상
+                        </div>
+                        <p id="bad-combo-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed break-keep"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap justify-center gap-3 mb-10">
+            <button onclick="startQuiz()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> 다시 진단하기
+            </button>
+            <button onclick="saveRecord()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-bookmark"></i> 진단 결과 저장하기 📝
+            </button>
+            <button onclick="toggleEncyclopediaModal(true)" class="px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition-all active:scale-95 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-book"></i> 전체 24색 탐색
+            </button>
+        </div>
+
+        <!-- LocalStorage History Section -->
+        <div class="border-t border-slate-200 pt-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i> 나의 심리 상태 변화 기록
+                </h3>
+                <button onclick="clearAllHistory()" class="text-xs text-rose-500 hover:text-rose-700 font-semibold px-2 py-1 rounded hover:bg-rose-50 transition-all">
+                    전체 삭제
+                </button>
+            </div>
+            <div id="history-container" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                <!-- History list populated via JS -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 4. 전체 24색 심리 백과사전 모달 (Encyclopedia Modal) -->
+<div id="encyclopedia-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden border border-slate-100">
+        <!-- Modal Header -->
+        <div class="p-6 bg-slate-900 text-white flex justify-between items-center">
+            <div>
+                <h3 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-indigo-400"></i> 24가지 색채 심리 백과사전
+                </h3>
+                <p class="text-xs text-slate-400 mt-1">각 색상이 지닌 깊은 무의식적 의미와 심리 리포트를 확인하세요.</p>
+            </div>
+            <button onclick="toggleEncyclopediaModal(false)" class="w-9 h-9 rounded-full bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="p-4 bg-slate-50 border-b border-slate-200">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="color-search-input" oninput="filterEncyclopedia()" placeholder="색상 이름 또는 심리 키워드 검색 (예: 빨강, 치유, 열정...)" class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+        </div>
+
+        <!-- Modal Body (Grid of 24 Types) -->
+        <div id="encyclopedia-list" class="p-6 overflow-y-auto space-y-4 flex-1">
+            <!-- Dynamic 24 color cards -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // 24가지 색상 전체 심층 심리 데이터베이스
+    // ==========================================
+    const results = {
+        red: {
+            name: "빨강색",
+            hex: "#ff4757",
+            text: "#ffffff",
+            subtitle: "불꽃같은 열정과 강렬한 주도적 생명력",
+            positive: "현재 당신의 내면에는 강한 생명력과 추진력이 정점에 달해 있습니다. 목표를 향해 당당하게 직진하고자 하는 열망이 크며, 주도적으로 상황을 이끌어갈 수 있는 자신감이 충만합니다. 새로운 도전에 주저하지 않는 본능적인 행동력이 매우 살아있는 상태입니다.",
+            negative: "과도한 조급함이나 누적된 스트레스로 인해 감정 스펙트럼이 과열되어 있을 수 있습니다. 쉽게 번아웃되거나 타인과의 관계에서 불필요한 마찰, 또는 조율되지 않은 분노를 느낄 위험이 있으니 감정 온도의 조절이 필요합니다.",
+            solution: "신체 감각에 집중하는 명상이나 잔잔한 수영, 조용한 음악 감상으로 과열된 에너지를 이완시켜 보세요. 붉은 자극적인 조명 대신 잔잔한 자연광 아래에서 10분간 깊은 복식호흡을 시행하는 것이 마음을 다잡는 데 큰 도움이 됩니다.",
+            goodCombo: "초록색 (과열된 열정을 차분하게 세심한 균형으로 다듬어 줌) & 파란색 (이성적 침착함을 더해 과속을 방지함)",
+            badCombo: "노란색 (지나친 자극과 초조함을 배가시켜 심리적 피로를 유발할 수 있음)"
+        },
+        green: {
+            name: "초록색",
+            hex: "#2ed573",
+            text: "#1e293b",
+            subtitle: "평화로운 조화와 온전한 자연 치유력",
+            positive: "내면의 평화와 균형을 가장 귀중히 여기는 상태입니다. 타인을 포용하고 다독이는 뛰어난 공감 능력과 안정감을 발휘하며, 외부의 소란에 흔들리지 않는 평정심을 유지하고 주변 사람들에게 든든한 안식처가 되어줍니다.",
+            negative: "현재 과도한 외부 요구와 소음으로 인해 일상으로부터 간절히 도피하고 싶은 정신적 피로감을 느끼고 있을 수 있습니다. 스스로를 보호하려는 방어 기제로 인해 변화에 대한 거부감이나 극단적인 소극성에 빠질 그늘이 있습니다.",
+            solution: "실내 식물을 가꾸거나 숲길, 공원을 산책하며 식물의 생명력을 직접 눈과 손으로 느껴보세요. 스마트폰 화면을 잠시 끄고 아로마 허브 향(라벤더, 유칼립투스)을 활용한 방향 테라피를 추천합니다.",
+            goodCombo: "갈색 (대지에 내린 뿌리처럼 편안한 심리적 안전지대 형성) & 빨강색 (정체된 에너지를 신선하게 깨우는 활력)",
+            badCombo: "주황색 (너그러운 휴식을 방해하는 과도한 소란과 자극을 발생시킴)"
+        },
+        blue: {
+            name: "파란색",
+            hex: "#1e90ff",
+            text: "#ffffff",
+            subtitle: "냉철한 통찰과 깊은 정서적 신뢰감",
+            positive: "높은 이성적 판단력과 명확한 통찰력으로 현상을 객관적으로 파악할 수 있는 지혜로운 상태입니다. 깊은 신뢰감과 책임감을 바탕으로 냉철하고 정확하게 문제를 해결해나갈 수 있는 유능함을 보유하고 있습니다.",
+            negative: "감정을 타인에게 드러내지 않고 솔직한 내면을 지나치게 억눌러 깊은 고독감이나 외로움을 느낄 수 있습니다. 스스로에게 너무 엄격한 기준을 적용하여 은연중에 자신을 고립시킬 가능성이 있습니다.",
+            solution: "가장 신뢰하는 사람과 솔직하게 마음속 고충을 나누어 보세요. 글쓰기나 다이어리를 통해 내면의 감정을 수면 위로 꺼내는 '감정 일기' 작성이 매우 효과적인 치유제입니다.",
+            goodCombo: "하얀색 (복잡한 생각을 비우고 순수한 판단력을 높임) & 회색 (차분하고 정돈된 내면 상태 보존)",
+            badCombo: "분홍색 (이성적 정돈을 흔드는 감정적 과잉 반응을 일으킬 수 있음)"
+        },
+        yellow: {
+            name: "노란색",
+            hex: "#ffa502",
+            text: "#1e293b",
+            subtitle: "찬란한 희망과 유쾌한 지적 호기심",
+            positive: "아이 같은 지적 호기심과 긍정적인 희망 에너지가 충만하여 아이디어가 샘솟고 계발 욕구가 높은 상태입니다. 사람들과의 유쾌한 소통을 즐기며 새로운 배움과 시작에 깊은 흥미를 느낍니다.",
+            negative: "내면에 내재된 불안감이나 인정받고 싶은 열망 때문에 과도하게 밝은 척하거나 주의 집중력이 산만해질 수 있습니다. 쉽게 피로해지거나 타인의 시선에 과도하게 신경 쓸 수 있습니다.",
+            solution: "따뜻한 햇살 아래에서 20분 이상 산책하며 비타민 D를 합성하고, 따뜻한 레몬차를 마셔보세요. 번뜩이는 아이디어를 메모지에 정리하고 하나씩 차근차근 실행하는 습관이 마음을 다잡아줍니다.",
+            goodCombo: "보라색 (산만한 창의성을 높은 예술적 완성도로 통합해 줌) & 파란색 (붕 뜬 마음에 차분한 지성을 더함)",
+            badCombo: "빨강색 (불안 수준을 높이고 과도한 심리적 자극을 야기함)"
+        },
+        purple: {
+            name: "보라색",
+            hex: "#9b59b6",
+            text: "#ffffff",
+            subtitle: "섬세한 감수성과 신비로운 예술적 직관",
+            positive: "예술적 감수성과 무의식의 직관력이 최고조에 달한 상태로, 영적인 성찰과 남다른 창의성을 지니고 있습니다. 남들이 보지 못하는 사물의 깊은 본질이나 감정의 미세한 결을 감지하는 능력이 탁월합니다.",
+            negative: "현실과 이상 사이의 격차에서 오는 심각한 혼란이나 우울감을 경험할 수 있습니다. 타인의 현실적인 조언을 거부하거나, 현실 감각이 결여된 고립된 환상 속으로 도피하려는 경향이 생길 수 있습니다.",
+            solution: "그림 그리기, 악기 연주, 시 쓰기 등 감정을 외부 형태로 표현하는 창작 활동을 시작해 보세요. 발을 지면에 대는 걷기 운동 등 '그라운딩(Grounding)' 연습으로 현실 감각을 다져야 합니다.",
+            goodCombo: "노란색 (현실적인 유쾌함과 활력을 불어넣어 균형을 맞춤) & 연보라색 (부드러운 감성 보둠)",
+            badCombo: "초록색 (너무 차분해져 창의적인 감성 에너지가 침체될 수 있음)"
+        },
+        orange: {
+            name: "주황색",
+            hex: "#ff7f50",
+            text: "#ffffff",
+            subtitle: "따뜻한 온기와 생동감 넘치는 사교성",
+            positive: "따스하고 친근한 사교성이 돋보이며, 주변 사람들에게 쾌활함과 즐거운 에너지를 선사하는 능력이 뛰어납니다. 적극적으로 타인과 교류하며 삶의 생동감을 온몸으로 즐기고 있는 상태입니다.",
+            negative: "사실은 외로움이나 버림받는 것에 대한 두려움을 잊기 위해 과도하게 사람들과 어울리거나 자극적인 재미만을 좇을 수 있습니다. 혼자 남겨졌을 때 느끼는 허전함과 감정 기복이 클 수 있습니다.",
+            solution: "혼자만의 시간을 가치 있게 보내는 요리나 홈카페 가꾸기 등 정적인 활동에 친숙해져 보세요. 외적 재미보다 내적 알차움을 채워줄 수 있는 독서나 사색의 시간을 가져봅시다.",
+            goodCombo: "청록색 (들뜬 마음을 깊이 있는 정서적 안도감으로 채워줌) & 남색 (과한 사교성에 진중함을 보강)",
+            badCombo: "초록색 (활발하게 분출하고 싶은 사교 욕구에 제동을 걸어 답답함을 유발)"
+        },
+        black: {
+            name: "검정색",
+            hex: "#2f3542",
+            text: "#ffffff",
+            subtitle: "단단한 경계와 숭고한 주관적 절제력",
+            positive: "확고한 자아와 단단한 주관으로 스스로를 보호하고 단속하는 강인한 절제력을 보유하고 있습니다. 외부 영향에 쉽게 흔들리지 않는 독립심과 타협하지 않는 품격을 지니고 있습니다.",
+            negative: "외부 세계에 대한 경계심이 지나쳐 타인과의 마음의 문을 완전히 닫아버린 상태일 수 있습니다. 상처받은 마음을 감추기 위해 과도하게 완벽하고 냉담하게 굴고 있을 그늘이 있습니다.",
+            solution: "안전하다고 느껴지는 공간에서 오롯이 휴식을 취하되, 신뢰하는 사람에게 소소한 솔직함을 고백해 보세요. 검은 옷 대신 파스텔톤 소품을 활용해 마음의 경계를 서서히 풀어봅시다.",
+            goodCombo: "하얀색 (극명한 명암 대비를 통해 깔끔하고 명확한 자아 확립) & 진분홍색 (딱딱한 경계에 온기를 더함)",
+            badCombo: "베이지색 (애매한 경계선으로 인해 검정의 명확함이 흐려져 답답함 유발)"
+        },
+        pink: {
+            name: "분홍색",
+            hex: "#ff6b81",
+            text: "#ffffff",
+            subtitle: "무한한 온정과 따스한 사랑의 위로",
+            positive: "따스한 무한한 애정과 상처받은 이들을 보살피고자 하는 온정성이 샘솟는 상태입니다. 타인의 아픔을 어루만져 주는 따스한 정서와 상냥하고 친절한 기운이 넘쳐납니다.",
+            negative: "마음의 자생력이 약해져 타인의 관심과 애정을 과도하게 구걸하거나 의존하려 할 수 있습니다. 거절당하는 것에 대한 유난한 공포나 아이처럼 어리광을 부리고 싶어 하는 무의식적 퇴행 욕구가 작용할 수 있습니다.",
+            solution: "남을 보살피기 전에 나 자신을 위해 정성스러운 식사를 준비하거나 셀프 마사지를 시행하세요. \"나는 나 자체로 충분히 사랑스럽다\"는 긍정 확언을 매일 아침 외쳐보는 것을 권장합니다.",
+            goodCombo: "회색 (지나치게 들뜨는 감정 표현을 모던하게 정돈) & 베이지색 (안정적인 온기 제공)",
+            badCombo: "파란색 (냉정한 논리로 분홍색의 부드럽고 따스한 감성을 얼어붙게 함)"
+        },
+        grey: {
+            name: "회색",
+            hex: "#a4b0be",
+            text: "#1e293b",
+            subtitle: "치우침 없는 중립과 침착한 관망",
+            positive: "객관적이고 중립적인 관점에서 시비를 가리지 않고 상황을 멀리서 조망할 수 있는 침착함이 있습니다. 극단에 치우치지 않고 어떠한 모험이나 충돌도 원치 않는 자제력이 높습니다.",
+            negative: "모든 것에 흥미를 잃은 무기력증이나 방관자적 태도에 빠져 있을 가능성이 큽니다. 자신만의 확실한 소신이나 의사를 표현하기를 회피하고 결정을 미루려는 그늘이 있습니다.",
+            solution: "아주 작은 선택이라도 내 의지로 직접 결정하는 연습(오늘 먹을 메뉴, 입을 옷 색상 선택 등)을 시작해 보세요. 비트가 있는 음악이나 가벼운 스트레칭으로 침체된 감각을 일깨워야 합니다.",
+            goodCombo: "분홍색 (차갑고 모호한 회색에 상큼하고 생기 있는 감정 촉매 역할) & 파란색 (명확한 지성 부여)",
+            badCombo: "금색 (회색의 수평적인 무난함과 금색의 자기과시욕이 상충하여 불쾌감 형성)"
+        },
+        white: {
+            name: "하얀색",
+            hex: "#f1f2f6",
+            text: "#1e293b",
+            subtitle: "순수한 정화와 새로운 시작의 서막",
+            positive: "과거의 복잡했던 모든 미련과 아쉬움을 깨끗이 털어내고 새로운 도화지 위에 시작하려는 순수한 정화 의지가 충만합니다. 고결한 윤리의식과 깔끔한 정돈감이 돋보입니다.",
+            negative: "완벽주의에 대한 강한 압박감 때문에 조금의 실수나 결점도 용납하지 못해 극심한 공허감이나 결벽증적 불안을 느낄 수 있습니다. 내면이 비어있다는 공허함이 밀려올 수 있습니다.",
+            solution: "\"완벽하지 않아도 괜찮아\"라는 완화된 태도를 수용하고 불완전함의 미학을 인정해 보세요. 흰 무지 노트에 아무렇게나 자유롭게 낙서해 보며 틀을 깨부수는 해방감을 느껴봅시다.",
+            goodCombo: "검정색 (분명한 윤곽을 잡아주어 공허함을 메워줌) & 파란색 (시원하고 명징한 자아 정체성 제공)",
+            badCombo: "없음 (어떤 색과도 기본적으로 유연하게 배합 가능)"
+        },
+        brown: {
+            name: "갈색",
+            hex: "#a0522d",
+            text: "#ffffff",
+            subtitle: "대지의 묵직함과 실용적인 안식",
+            positive: "대지처럼 견고하고 묵직한 안정감과 현실적이고 실용적인 삶의 태도를 견지하고 있습니다. 책임감이 강하고 성실하여 주변 사람들에게 흔들리지 않는 든든한 버팀목이 되어줍니다.",
+            negative: "고지식함이나 고집스러움으로 인해 새로운 변화나 혁신을 강하게 거부할 수 있습니다. 일상의 매너리즘에 빠져 삶의 흥미를 잃어버리고 답답한 고립감에 사로잡히기 쉽습니다.",
+            solution: "평소 다니던 길과 전혀 다른 루트로 산책해 보거나 낯선 분야의 책과 음식을 경험해 보세요. 따뜻한 흙냄새가 나는 우디 계열 아로마 오일을 활용한 방향욕을 추천합니다.",
+            goodCombo: "초록색 (대지와 식물의 조화처럼 자연스러운 편안함 제공) & 아이보리 (부드럽고 신뢰감 있는 조화)",
+            badCombo: "연보라색 (갈색의 현실적인 감각과 연보라의 몽환적인 감성이 불협화음 유발)"
+        },
+        navy: {
+            name: "남색",
+            hex: "#2c3e50",
+            text: "#ffffff",
+            subtitle: "깊은 바다 같은 통찰과 원숙한 책임감",
+            positive: "깊은 바다와 같은 원숙한 통찰력과 강한 책임감, 진중한 신념을 지닌 상태입니다. 논리정연한 사고방식으로 복잡한 문제의 핵심을 단번에 짚어내는 탁월한 능력이 있습니다.",
+            negative: "지나치게 과도한 책임감과 완벽에 대한 중압감 때문에 가슴이 턱 막히는 압박감을 견디고 있을 수 있습니다. 타인에게 약점을 보이지 않으려 과도하게 긴장하여 심신이 지쳐있을 위험이 있습니다.",
+            solution: "모든 직책과 역할을 잠시 내려놓고 따뜻한 물로 반신욕을 하며 머리를 완전히 비워내세요. 밤하늘을 바라보며 나를 누르던 무거운 의무감이 우주 전체에 비하면 얼마나 작은 것인지 되새겨봅니다.",
+            goodCombo: "주황색 (남색의 과도한 중압감을 쾌활하고 유쾌한 따스함으로 환기) & 은색 (고급스럽고 명확한 판단력 부여)",
+            badCombo: "밝은 회색 (남색의 무게감을 모호하게 만들어 미지근한 결론을 내리게 함)"
+        },
+        maroon: {
+            name: "적갈색",
+            hex: "#800000",
+            text: "#ffffff",
+            subtitle: "묵직하게 무르익은 내면의 카리스마",
+            positive: "오랜 경험과 시련을 거쳐 묵직하게 다듬어진 인내심과 은근한 카리스마를 갖추고 있습니다. 깊은 관조 속에서 표출되는 중후한 열정으로 사람들에게 깊은 무게감을 느끼게 합니다.",
+            negative: "오래 묵은 감정의 앙금이나 원한, 깊은 피로감이 마음 구석에 켜켜이 쌓여있을 수 있습니다. 과거의 상처나 실패 경험에 연연하여 새로운 시도를 주저하는 고집에 빠지기 쉽습니다.",
+            solution: "따뜻한 레드티(루이보스, 홍차)를 마시며 지나간 과거의 짐을 훌훌 털어버리는 시간을 가지세요. 오래된 물건이나 불필요한 서류를 정리하는 '비움의 미학'을 실천해봅시다.",
+            goodCombo: "금색 (적갈색의 중후함에 풍요로운 영광을 더해줌) & 민트 (오래 묵은 답답함을 신선하게 환기)",
+            badCombo: "연노란색 (적갈색의 진중함을 가볍게 해쳐서 모욕적인 느낌을 줄 수 있음)"
+        },
+        lightGreen: {
+            name: "연두색",
+            hex: "#7bed9f",
+            text: "#1e293b",
+            subtitle: "파릇파릇한 새싹의 순수한 성장판",
+            positive: "봄날의 새싹처럼 싱그럽고 파릇파릇한 배움의 의지와 성장 욕구가 왕성한 상태입니다. 새로운 프로젝트나 환경에 대한 기대감으로 마음에 청량한 에너지가 감돌고 있습니다.",
+            negative: "아직 경험이 미숙하거나 지식이 부족하다는 생각에 다소 초조하거나 조급함을 느낄 수 있습니다. 타인과 비교하며 자신의 성장이 느리다고 느껴 스스로를 자책하는 그늘이 있을 수 있습니다.",
+            solution: "\"모든 커다란 나무도 아주 작은 씨앗에서 시작되었다\"는 사실을 상기하세요. 작은 목표를 세워 하나씩 달성할 때마다 성취의 기쁨을 차근차근 누리는 것이 핵심입니다.",
+            goodCombo: "베이지색 (새싹을 감싸주는 따뜻한 흙처럼 안락한 성장을 도움) & 아이보리 (화사하고 부드러운 시작)",
+            badCombo: "적갈색 (연두색의 파릇파릇한 생명력을 짓눌러 조기 시들음을 유발)"
+        },
+        skyBlue: {
+            name: "하늘색",
+            hex: "#70a1ff",
+            text: "#1e293b",
+            subtitle: "탁 트인 자유와 해방의 산들바람",
+            positive: "탁 트인 하늘처럼 억압 없는 자유와 영감을 열망하는 순수한 감성을 보유하고 있습니다. 경쾌하고 솔직한 소통 능력으로 사람들에게 청량함과 소통의 기쁨을 선사합니다.",
+            negative: "현실적인 문제나 책임으로부터 도망치고 싶어 하는 무책임한 회피 욕구가 작용할 수 있습니다. 얕은 인간관계에 머물며 진지한 대화를 피하려는 표면적인 태도를 취할 위험이 있습니다.",
+            solution: "탁 트인 전망대나 바다, 넓은 공원으로 나가 시야를 넓히고 원없이 바람을 맞이해 보세요. 떠오는 생각들을 자유롭게 노트에 적는 저널링이 자유의 욕구를 건전하게 해소합니다.",
+            goodCombo: "민트 & 라벤더 (자유롭고 몽환적인 창의적 영감을 극대화) & 하얀색 (투명한 깨끗함 보장)",
+            badCombo: "검정색 (하늘색의 자유롭고 가벼운 날갯짓을 무겁게 침전시킴)"
+        },
+        lightYellow: {
+            name: "연노란색",
+            hex: "#ffeaa7",
+            text: "#1e293b",
+            subtitle: "봄햇살처럼 부드럽고 가벼운 안도감",
+            positive: "따스한 봄햇살처럼 부드럽고 가벼운 미소와 은은한 기분 전환을 원하고 있습니다. 과도한 중압감 없이 유연하게 주변을 살피는 산뜻한 호기심이 마음을 기분 좋게 간지럽힙니다.",
+            negative: "집중력이 쉽게 흐려지고 산만해져 하나의 일을 오래 지속하기 어려울 수 있습니다. 사소한 자극에도 쉽게 정신적 피로감을 느끼며 결단력이 약해질 수 있습니다.",
+            solution: "달콤한 과일이나 카모마일 티를 즐기며 조용히 스마트폰 알림을 꺼두는 시간을 가지세요. 할 일 목록을 단순하게 3가지로 압축하여 우선순위에 집중하는 훈련을 추천합니다.",
+            goodCombo: "연보라색 (연노란색의 산만함을 신비롭고 안정적인 결로 감싸줌) & 베이지색 (은은한 안식처)",
+            badCombo: "적갈색 (산뜻한 미소를 짓고 있는 내면에 무겁고 탁한 그늘을 드리움)"
+        },
+        lightPurple: {
+            name: "연보라색",
+            hex: "#d8b4fe",
+            text: "#1e293b",
+            subtitle: "동화처럼 몽환적인 감성 치유제",
+            positive: "동화적이고 몽환적인 예민한 감수성으로, 고단한 현실 속에서도 신비로운 아름다움을 발견해내는 능력이 있습니다. 타인의 상처를 은은하게 어루만지는 상냥한 심리적 치유제입니다.",
+            negative: "현실 감각이 현저히 떨어져 비현실적인 공상 속에 몰입하거나 우유부단해질 수 있습니다. 무책임하다는 평가를 받을까 두려워하며 현실적인 문제 해결을 지연시킬 수 있습니다.",
+            solution: "맨발로 잔디를 걷거나 확실한 숫자가 적힌 가계부, 일정표를 정리해 보세요. 감상적인 음악 감상 후에는 가벼운 스쿼트나 기지개로 몸의 감각을 현실로 되돌려야 합니다.",
+            goodCombo: "연노란색 (몽환적인 상상력에 가볍고 화사한 미소를 불어넣음) & 보라색 (깊이 있는 예술성 승화)",
+            badCombo: "갈색 (연보라색의 섬세하고 아름다운 감성 나래를 둔탁하게 꺾어버림)"
+        },
+        beige: {
+            name: "베이지색",
+            hex: "#f5cd79",
+            text: "#1e293b",
+            subtitle: "자연스러운 무던함과 진솔한 포용",
+            positive: "자극적이지 않고 자연스러운 무던함으로 타인을 편안하게 해주는 따스한 포용력을 가집니다. 있는 그대로의 자신을 과시하지 않고 진솔하고 거품 없는 인간관계를 중시합니다.",
+            negative: "남의 눈치를 과도하게 보며 자신의 정당한 요구나 주장을 펼치지 못하고 무조건 양보만 할 수 있습니다. 이로 인해 내면에 억울함이나 자아 상실감이 서서히 쌓여갈 위험이 있습니다.",
+            solution: "\"아니오\"라고 당당하게 거절하는 단호함 연습을 작게 시작해 보세요. 나만을 위한 독창적인 취향이나 개인적 공간을 확보하여 스스로의 개성을 드러내는 기회를 만듭니다.",
+            goodCombo: "분홍색 (슴슴한 베이지에 사랑스러운 유쾌함 추가) & 연두색 (자연스러운 삶의 생기 강화)",
+            badCombo: "검정색 (베이지의 따스하고 유연한 기운을 수동적이고 무기력하게 차단)"
+        },
+        turquoise: {
+            name: "청록색",
+            hex: "#17c0eb",
+            text: "#ffffff",
+            subtitle: "청량한 바다의 독창적인 표현력",
+            positive: "에메랄드 빛 바다처럼 독창적인 개성과 청량한 소통 능력이 한껏 피어난 상태입니다. 새로운 매체를 활용해 자신을 창의적으로 표현하고 타인을 매료시키는 세련된 에너지가 넘칩니다.",
+            negative: "감정의 기복이 급격히 변하여 일관성 있는 태도를 유지하기 어려울 수 있습니다. 남들과 다르고 싶은 과도한 승부욕이나 독선에 빠질 수 있으니 주의하세요.",
+            solution: "매일 규칙적인 시간에 수면하고 일어나는 일상 루틴을 철저히 사수하세요. 수영이나 정갈한 물소리를 들으며 마음의 파도를 정돈하는 음향 테라피가 뛰어난 효과를 발휘합니다.",
+            goodCombo: "주황색 (청록색의 차가운 세련미에 열정적인 인간미를 더해줌) & 금색 (화려한 풍요로움 연출)",
+            badCombo: "진분홍색 (서로 강렬한 자기주장만을 내세워 극심한 안구 및 정서적 피로 유발)"
+        },
+        darkPink: {
+            name: "진분홍색",
+            hex: "#e84393",
+            text: "#ffffff",
+            subtitle: "대담하고 화려한 매력의 피어남",
+            positive: "자신의 매력과 독보적인 가치를 세상에 대담하게 드러내고자 하는 화려한 열정이 가득합니다. 자신감 넘치는 표현력으로 당당하게 인기를 끌며 당찬 에너지를 발산합니다.",
+            negative: "남들의 인정과 관심에 목말라하며 감정이 지나치게 과잉되거나 연극적인 태도를 취할 수 있습니다. 주목받지 못할 때 느끼는 상실감이나 공허함이 강하게 밀려올 수 있습니다.",
+            solution: "타인의 평가에 연연하지 않고 홀로 조용히 촛불을 켜고 명상하는 시간을 가져보세요. 나의 화려한 외면 뒤에 숨겨진 솔직하고 소박한 내면의 가치를 인정해 주는 훈련이 필요합니다.",
+            goodCombo: "검정색 (진분홍의 화려함을 시크하고 세련되게 잡아줌) & 은색 (현대적이고 스타일리시한 조화)",
+            badCombo: "청록색 (서로 시선을 강제로 빼앗으려 다투어 피로감을 유발)"
+        },
+        gold: {
+            name: "금색",
+            hex: "#e1b12c",
+            text: "#1e293b",
+            subtitle: "찬란한 풍요와 당당한 성취의 가치",
+            positive: "스스로에 대한 높아진 자부심과 당당한 성취감, 물질적·정신적 풍요로움이 최고조에 도달한 상태입니다. 커다란 목표를 달성할 수 있는 고귀한 리더십과 번영의 에너지가 넘칩니다.",
+            negative: "지나친 자만심이나 물질적인 과시욕, 타인을 은근히 무시하는 오만함에 빠질 위험이 있습니다. 내가 가진 성과가 손실될까 봐 전전긍긍하는 은밀한 불안감이 공존할 수 있습니다.",
+            solution: "나보다 어려운 이웃이나 주위 사람들에게 경험과 자원을 아낌없이 나누는 봉사와 기부를 실천하세요. 외적인 성과뿐만 아니라 소소한 내면의 감사한 일들을 일기에 기록해 봅시다.",
+            goodCombo: "적갈색 (금색의 승리 기운에 묵직한 가치관을 보강) & 청록색 (신선하고 독창적인 승리 연출)",
+            badCombo: "회색 (금색의 빛나는 고귀함과 성취욕을 무채색의 회의론으로 가려버림)"
+        },
+        silver: {
+            name: "은색",
+            hex: "#dcdde1",
+            text: "#1e293b",
+            subtitle: "달빛처럼 매끄럽고 세련된 지성",
+            positive: "달빛처럼 차분하고 세련된 지성과 현대적인 감성, 매끄러운 원활성을 자랑하는 상태입니다. 감정에 휘둘리지 않고 깔끔하게 일을 정리하는 뛰어난 순발력을 발휘합니다.",
+            negative: "차가운 완벽주의로 인해 타인에게 가혹한 선을 긋고 인간미 없는 단절을 유발할 수 있습니다. 내면의 진짜 온기를 차단한 채 껍데기만 매끄럽게 포장하려 할 가능성이 있습니다.",
+            solution: "손으로 직접 도자기를 만들거나 따뜻한 온기가 있는 차를 손에 쥐며 체온을 느껴보세요. 딱딱한 비즈니스 대화 대신 친근한 안부 인사와 감정적인 인사를 먼저 건네봅시다.",
+            goodCombo: "남색 (지적이고 단단한 완벽함을 실현) & 진분홍색 (차가운 지성에 열정적인 반전 매력 더함)",
+            badCombo: "금색 (은색의 차분하고 은은한 우아함과 금색의 강렬한 화려함이 상충)"
+        },
+        ivory: {
+            name: "아이보리",
+            hex: "#fffbe6",
+            text: "#1e293b",
+            subtitle: "포근하고 다정한 마음의 둥지",
+            positive: "우유빛처럼 포근하고 따스한 순수함으로, 다정한 포용력과 부드러운 평온함을 선사하는 심리 상태입니다. 사람들의 마음을 스르르 녹이는 편안한 온기를 품고 있습니다.",
+            negative: "외부의 사소한 비판이나 자극에도 마음이 쉽게 부서지고 상처받는 유약함이 있습니다. 타인의 주도권에 쉽게 끌려 다니며 내면의 줏대를 잃어버릴 수 있습니다.",
+            solution: "\"나의 마음은 내 생각보다 훨씬 단단하다\"는 자아 강화 운동을 시행하세요. 나만의 경계를 정하고 내 영역을 침범하는 요구에는 분명히 거부하는 연습이 필요합니다.",
+            goodCombo: "연두색 (아이보리의 부드러움에 싱그러운 성장의 에너지를 결합) & 갈색 (안정적인 안식처)",
+            badCombo: "검정색 (부드러운 아이보리의 온기를 날카롭게 짓누름)"
+        },
+        lightGrey: {
+            name: "밝은 회색",
+            hex: "#f5f6fa",
+            text: "#1e293b",
+            subtitle: "고요하고 은은한 미색의 정적",
+            positive: "세상의 복잡한 소란에서 비껴서서 조용한 평온과 무난한 안식을 추구하는 상태입니다. 자극에 휩쓸리지 않고 차분하게 자신의 페이스를 유지하는 은은함이 있습니다.",
+            negative: "자신의 존재감이 흐려지고 사회적 관계에서 방관자로 뒤물러나 무기력하게 체념할 수 있습니다. 스스로를 가치 없는 존재로 낮춰보는 자존감 저하 현상이 나타날 수 있습니다.",
+            solution: "내 목소리를 내어 소소한 아이디어나 소감을 말하는 발언 기회를 일부러 만들어보세요. 알록달록한 그림을 그리거나 밝은 컬러의 의상을 착용해 자신감을 회복해 봅시다.",
+            goodCombo: "하늘색 (맑고 상쾌한 해방감을 더해줌) & 분홍색 (은은한 평온에 따스한 감정 자극 투여)",
+            badCombo: "남색 (밝은 회색의 조용한 소망을 너무 무거운 책임감으로 압박함)"
+        }
+    };
+
+    // ==========================================
+    // 8개 질문 및 24색 선택지 매핑
+    // ==========================================
+    const questions = [
+        {
+            title: "Q1. 최근 바쁜 일상 속에서 문득 떠나 깊은 숨을 쉬고 싶은 나의 '영혼의 안식처'는 어떤 빛깔인가요?",
+            options: ["green", "navy", "lightPurple", "beige", "turquoise", "black", "red", "yellow", "pink", "white", "skyBlue", "grey"]
+        },
+        {
+            title: "Q2. 중요한 도전이나 과제를 돌파하기 위해 지금 내 안에서 불태우고 싶은 무의식적 에너지는?",
+            options: ["red", "yellow", "pink", "skyBlue", "orange", "turquoise", "navy", "lightGreen", "lightPurple", "black", "gold", "maroon"]
+        },
+        {
+            title: "Q3. 사람들과 만나 이야기를 나눌 때, 은연중에 상대방에게 느껴졌으면 하는 나의 인상은?",
+            options: ["darkPink", "beige", "yellow", "lightPurple", "orange", "black", "white", "skyBlue", "red", "turquoise", "silver", "gold"]
+        },
+        {
+            title: "Q4. 오롯이 혼자만의 방에서 마음의 안정을 찾을 때 나를 감싸주길 바라는 분위기는?",
+            options: ["skyBlue", "turquoise", "lightGreen", "white", "lightPurple", "navy", "beige", "black", "orange", "yellow", "lightGrey", "ivory"]
+        },
+        {
+            title: "Q5. 감정적으로 복잡하고 머릿속이 엉켜있을 때 내 마음을 가라앉혀주는 치유의 빛깔은?",
+            options: ["navy", "black", "white", "turquoise", "lightGreen", "skyBlue", "lightPurple", "red", "beige", "darkPink", "grey", "brown"]
+        },
+        {
+            title: "Q6. 서운함이나 상처로 마음이 추울 때, 내 영혼을 다정하게 안아줄 수 있는 위로의 온도는?",
+            options: ["beige", "lightPurple", "darkPink", "orange", "lightGreen", "white", "skyBlue", "yellow", "turquoise", "navy", "pink", "lightYellow"]
+        },
+        {
+            title: "Q7. 잠자고 있던 창의성과 예술적 영감을 깨우기 위해 끌리는 가장 강렬한 직관의 색은?",
+            options: ["yellow", "red", "orange", "darkPink", "purple", "turquoise", "skyBlue", "lightGreen", "navy", "black", "gold", "silver"]
+        },
+        {
+            title: "Q8. 나 자신과의 깊은 대화 끝에 다다르고 싶은 내면의 궁극적인 평온은 어떤 모습인가요?",
+            options: ["green", "white", "black", "navy", "lightPurple", "lightGreen", "skyBlue", "beige", "orange", "red", "brown", "silver"]
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    const scores = {};
+    let lastResultType = "";
+
+    // 화면 전환
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        const target = document.getElementById(screenId);
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 퀴즈 시작
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        for (let key in scores) delete scores[key];
+        switchScreen('quiz-screen');
+        showQuestion();
+    }
+
+    // 질문 및 선택지 출력
+    function showQuestion() {
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById("question-indicator").innerText = `질문 ${currentQuestionIndex + 1} / ${questions.length}`;
+        const progressPercent = Math.round(((currentQuestionIndex) / questions.length) * 100);
+        document.getElementById("progress-text").innerText = `${progressPercent}% 진행됨`;
+        document.getElementById("progress-bar").style.width = `${progressPercent}%`;
+
+        document.getElementById("question-title").innerText = q.title;
+
+        const grid = document.getElementById("color-grid");
+        grid.innerHTML = "";
+
+        q.options.forEach(colorKey => {
+            const item = results[colorKey];
+            if (!item) return;
+
+            const btn = document.createElement("button");
+            btn.className = "color-card-btn p-4 rounded-2xl flex flex-col items-center justify-center gap-2 font-bold text-sm shadow-sm border border-black/5 cursor-pointer text-center";
+            btn.style.backgroundColor = item.hex;
+            btn.style.color = item.text;
+            btn.onclick = () => selectOption(colorKey);
+
+            btn.innerHTML = `
+                <span class="w-4 h-4 rounded-full border border-black/10 inline-block" style="background-color: ${item.hex};"></span>
+                <span>${item.name}</span>
+            `;
+            grid.appendChild(btn);
+        });
+    }
+
+    // 선택지 클릭 처리
+    function selectOption(type) {
+        scores[type] = (scores[type] || 0) + 1;
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < questions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    // 결과 산출 및 화면 바인딩
+    function showResult() {
+        switchScreen('result-screen');
+
+        // 가장 점수가 높은 색상 선택 (동점시 무작위 안전 처리)
+        let topType = "red";
+        let maxScore = -1;
+        for (let key in scores) {
+            if (scores[key] > maxScore) {
+                maxScore = scores[key];
+                topType = key;
+            }
+        }
+        lastResultType = topType;
+        const res = results[topType];
+
+        // Header Styling Update
+        const resHeader = document.getElementById("result-header");
+        resHeader.style.backgroundColor = res.hex;
+        resHeader.style.color = res.text;
+
+        document.getElementById("result-badge").innerText = res.name;
+        document.getElementById("result-badge").style.color = res.text;
+        document.getElementById("result-badge").style.backgroundColor = res.text === "#ffffff" ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.15)";
+        
+        document.getElementById("result-title").innerText = `현재 당신의 에너지는 '${res.name}'입니다.`;
+        document.getElementById("result-subtitle").innerText = res.subtitle;
+
+        document.getElementById("result-color-swatch").style.backgroundColor = res.hex;
+
+        // Content Sections
+        document.getElementById("result-positive").innerText = res.positive;
+        document.getElementById("result-negative").innerText = res.negative;
+        document.getElementById("result-solution").innerText = res.solution;
+
+        document.getElementById("good-combo-text").innerText = res.goodCombo;
+        document.getElementById("bad-combo-text").innerText = res.badCombo;
+
+        loadRecords();
+    }
+
+    // LocalStorage 결과 저장
+    function saveRecord() {
+        if (!lastResultType) return;
+
+        const dateStr = new Date().toLocaleDateString('ko-KR', {
+            year: '2-digit', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        const record = {
+            id: Date.now(),
+            date: dateStr,
+            colorKey: lastResultType,
+            typeName: results[lastResultType].name,
+            subtitle: results[lastResultType].subtitle,
+            hex: results[lastResultType].hex,
+            textHex: results[lastResultType].text
+        };
+
+        let records = JSON.parse(localStorage.getItem("color_psych_history_v5") || "[]");
+        records.unshift(record);
+        if (records.length > 15) records.pop();
+
+        localStorage.setItem("color_psych_history_v5", JSON.stringify(records));
+        showToast("현재 검사 결과가 기록에 안전하게 저장되었습니다! 📝", "success");
+        loadRecords();
+    }
+
+    // 저장된 기록 삭제
+    function deleteRecord(id) {
+        let records = JSON.parse(localStorage.getItem("color_psych_history_v5") || "[]");
+        records = records.filter(r => r.id !== id);
+        localStorage.setItem("color_psych_history_v5", JSON.stringify(records));
+        showToast("선택한 검사 기록이 삭제되었습니다.", "info");
+        loadRecords();
+    }
+
+    function clearAllHistory() {
+        let records = JSON.parse(localStorage.getItem("color_psych_history_v5") || "[]");
+        if (records.length === 0) {
+            showToast("삭제할 저장 기록이 없습니다.", "info");
+            return;
+        }
+        localStorage.removeItem("color_psych_history_v5");
+        showToast("모든 검사 기록이 삭제되었습니다.", "info");
+        loadRecords();
+    }
+
+    // 기록 불러오기 및 UI 그려주기
+    function loadRecords() {
+        const container = document.getElementById("history-container");
+        let records = JSON.parse(localStorage.getItem("color_psych_history_v5") || "[]");
+
+        if (records.length === 0) {
+            container.innerHTML = `<p class="text-xs text-slate-400 py-3 text-center">아직 저장된 검사 기록이 없습니다. 결과를 저장해 변화를 추적해보세요.</p>`;
+            return;
+        }
+
+        container.innerHTML = "";
+        records.forEach(r => {
+            const div = document.createElement("div");
+            div.className = "flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm hover:bg-slate-100 transition-all";
+            div.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="w-4 h-4 rounded-full border border-black/10 flex-shrink-0" style="background-color: ${r.hex}"></span>
+                    <div>
+                        <div class="font-bold text-slate-800">${r.typeName} <span class="text-xs font-normal text-slate-500">(${r.date})</span></div>
+                        <div class="text-xs text-slate-500 truncate max-w-[200px] sm:max-w-md">${r.subtitle}</div>
+                    </div>
+                </div>
+                <button onclick="deleteRecord(${r.id})" class="text-slate-400 hover:text-rose-500 p-1 rounded transition-colors" title="기록 삭제">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    // 24색 백과사전 모달 토글
+    function toggleEncyclopediaModal(show) {
+        const modal = document.getElementById("encyclopedia-modal");
+        if (show) {
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.remove("opacity-0");
+            }, 10);
+            renderEncyclopediaList(results);
+        } else {
+            modal.classList.add("opacity-0");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 300);
+        }
+    }
+
+    // 백과사전 카드 목록 렌더링
+    function renderEncyclopediaList(dataset) {
+        const list = document.getElementById("encyclopedia-list");
+        list.innerHTML = "";
+
+        const keys = Object.keys(dataset);
+        if (keys.length === 0) {
+            list.innerHTML = `<p class="text-center text-slate-400 text-sm py-8">일치하는 색상 키워드가 없습니다.</p>`;
+            return;
+        }
+
+        keys.forEach(key => {
+            const item = dataset[key];
+            const card = document.createElement("details");
+            card.className = "group border border-slate-200 rounded-2xl bg-white overflow-hidden transition-all duration-200";
+            
+            card.innerHTML = `
+                <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 select-none">
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-lg border border-black/10 shadow-sm flex-shrink-0" style="background-color: ${item.hex}"></span>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">${item.name}</h4>
+                            <p class="text-xs text-slate-500">${item.subtitle}</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-slate-400 text-xs group-open:rotate-180 transition-transform"></i>
+                </summary>
+                <div class="p-4 bg-slate-50 border-t border-slate-100 text-xs sm:text-sm space-y-3 leading-relaxed">
+                    <div>
+                        <strong class="text-indigo-600 font-bold block mb-1"><i class="fa-solid fa-magnifying-glass"></i> 현재 심리 분석</strong>
+                        <p class="text-slate-700">${item.positive}</p>
+                    </div>
+                    <div>
+                        <strong class="text-amber-600 font-bold block mb-1"><i class="fa-solid fa-masks-theater"></i> 그림자 & 무의식 욕구</strong>
+                        <p class="text-slate-700">${item.negative}</p>
+                    </div>
+                    <div>
+                        <strong class="text-emerald-600 font-bold block mb-1"><i class="fa-solid fa-lightbulb"></i> 컬러 테라피 가이드</strong>
+                        <p class="text-slate-700">${item.solution}</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <div class="p-2 bg-emerald-100/50 rounded-lg text-emerald-900">
+                            <strong>✨ 시너지:</strong> ${item.goodCombo}
+                        </div>
+                        <div class="p-2 bg-rose-100/50 rounded-lg text-rose-900">
+                            <strong>⚠️ 주의:</strong> ${item.badCombo}
+                        </div>
+                    </div>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    // 백과사전 실시간 검색 필터
+    function filterEncyclopedia() {
+        const query = document.getElementById("color-search-input").value.trim().toLowerCase();
+        if (!query) {
+            renderEncyclopediaList(results);
+            return;
+        }
+
+        const filtered = {};
+        for (let key in results) {
+            const item = results[key];
+            if (
+                item.name.toLowerCase().includes(query) ||
+                item.subtitle.toLowerCase().includes(query) ||
+                item.positive.toLowerCase().includes(query) ||
+                item.solution.toLowerCase().includes(query)
+            ) {
+                filtered[key] = item;
+            }
+        }
+        renderEncyclopediaList(filtered);
+    }
+
+    // 커스텀 토스트 메시지
+    function showToast(msg, type = "success") {
+        const toast = document.getElementById("toast");
+        const toastMsg = document.getElementById("toast-message");
+        const toastIcon = document.getElementById("toast-icon");
+
+        toastMsg.innerText = msg;
+        if (type === "success") {
+            toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-lg";
+        } else {
+            toastIcon.className = "fa-solid fa-circle-info text-indigo-400 text-lg";
+        }
+
+        toast.classList.remove("hide");
+        toast.classList.add("show");
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+            toast.classList.add("hide");
+        }, 3000);
+    }
+
+    // 초기화
+    document.addEventListener("DOMContentLoaded", () => {
+        loadRecords();
+    });
+</script>
+
+</body>
+</html>
